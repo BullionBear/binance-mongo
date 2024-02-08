@@ -1,28 +1,29 @@
 package config
 
 import (
-	"encoding/json"
-	"os"
+	"log"
+
+	"github.com/spf13/viper"
 )
 
 type Config struct {
-	Channel    string `json:"channel"`
-	MongoDBUrl string `json:"mongodb"`
+	Channel    string `mapstructure:"channel"`
+	MongoDBUrl string `mapstructure:"mongodb"`
 }
 
-func LoadConfig(path string) (Config, error) {
+func LoadConfig(configPath string) Config {
 	var config Config
-	file, err := os.Open(path)
-	if err != nil {
-		return config, err // Return the zero value of Config and the error
-	}
-	defer file.Close()
 
-	decoder := json.NewDecoder(file)
-	err = decoder.Decode(&config)
-	if err != nil {
-		return config, err // Return the zero value of Config and the error
+	viper.SetConfigFile(configPath) // Set the path of the config file
+	viper.AutomaticEnv()            // Override values from environment variables
+
+	if err := viper.ReadInConfig(); err != nil {
+		log.Fatalf("Error reading config file, %s", err)
 	}
 
-	return config, nil // Return the loaded config and no error
+	if err := viper.Unmarshal(&config); err != nil {
+		log.Fatalf("Unable to decode into struct, %s", err)
+	}
+
+	return config
 }
