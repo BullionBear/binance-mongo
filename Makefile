@@ -13,7 +13,7 @@ build:
 	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-linux-arm64 cmd/*.go
 
 run:
-	./bin/$(BINARY) --config ./cmd/config.json
+	./bin/$(BINARY) -logtostderr=true --config ./cmd/config.json
 
 clean:
 	rm -rf bin/*

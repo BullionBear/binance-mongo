@@ -2,9 +2,9 @@ package main
 
 import (
 	"flag"
-	"fmt"
 
 	"github.com/BullionBear/binance-mongo/config"
+	"github.com/golang/glog"
 )
 
 func main() {
@@ -14,5 +14,10 @@ func main() {
 
 	// Load the configuration
 	config := config.LoadConfig(*configPath)
-	fmt.Printf("Loaded config: %+v", config)
+
+	// Use logrus for logging
+	// Adjust the logging level as needed
+	glog.Infoln("Loaded config: ", config)
+	defer glog.Flush()
+
 }
