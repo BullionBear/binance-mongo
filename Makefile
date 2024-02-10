@@ -18,7 +18,7 @@ server-run:
 	./bin/$(BINARY)-server -logtostderr=true -v=2
 
 client-run:
-	./bin/$(BINARY)-client -logtostderr=true -v=2
+	./bin/$(BINARY)-client -logtostderr=true -v=2 -symbol=BTCUSDT
 
 clean:
 	rm -rf bin/*
