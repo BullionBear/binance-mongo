@@ -15,10 +15,10 @@ build:
 	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-client-linux-arm64 cmd/client/*.go
 
 server-run:
-	./bin/$(BINARY)-server -logtostderr=true
+	./bin/$(BINARY)-server -logtostderr=true -v=2
 
 client-run:
-	./bin/$(BINARY)-client -logtostderr=true
+	./bin/$(BINARY)-client -logtostderr=true -v=2
 
 clean:
 	rm -rf bin/*
