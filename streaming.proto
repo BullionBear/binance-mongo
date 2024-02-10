@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package depthevent;
+
+// Specify the Go package where the generated files should be placed.
+// Replace "path/to/your/generated/proto/package" with your desired package path.
+option go_package = "./generated/proto/depth";
+
+// The depth event message
+message WsDepthEvent {
+  string event = 1;
+  int64 time = 2;
+  string symbol = 3;
+  int64 lastUpdateID = 4;
+  int64 firstUpdateID = 5;
+  repeated Bid bids = 6;
+  repeated Ask asks = 7;
+}
+
+message Bid {
+  string price = 1;
+  string quantity = 2;
+}
+
+message Ask {
+  string price = 1;
+  string quantity = 2;
+}
+
+// The service definition
+service DepthEventService {
+  rpc StreamDepthEvent(stream WsDepthEvent) returns (StreamDepthEventResponse);
+}
+
+message StreamDepthEventResponse {
+  string message = 1;
+}

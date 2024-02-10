@@ -4,19 +4,15 @@ import (
 	"flag"
 	"time"
 
-	"github.com/BullionBear/binance-mongo/config"
 	"github.com/BullionBear/binance-mongo/stream"
 	"github.com/adshao/go-binance/v2"
 	"github.com/golang/glog"
 )
 
 func main() {
-	configPath := flag.String("config", "config.json", "path to config file")
 	flag.Parse()
 
-	config := config.LoadConfig(*configPath)
-
-	glog.Infoln("Loaded config: ", config)
+	glog.Infoln("Starting without loading config.")
 	defer glog.Flush()
 
 	symbol := "SOLUSDT"

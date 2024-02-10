@@ -9,11 +9,16 @@ LDFLAGS := -X '${PACKAGE}/env.Version=${VERSION}' \
            -X '${PACKAGE}/env.BuildTime=${BUILD_TIMESTAMP}'
 
 build:
-	go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY) cmd/*.go
-	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-linux-arm64 cmd/*.go
+	go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-server cmd/server/*.go
+	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-server-linux-arm64 cmd/server/*.go
+	go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-client cmd/client/*.go
+	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-client-linux-arm64 cmd/client/*.go
 
-run:
-	./bin/$(BINARY) -logtostderr=true --config ./cmd/config.json
+server-run:
+	./bin/$(BINARY)-server -logtostderr=true
+
+client-run:
+	./bin/$(BINARY)-client -logtostderr=true
 
 clean:
 	rm -rf bin/*
