@@ -27,11 +27,8 @@ func BinanceToGrpcEvent(event *binance.WsDepthEvent) *pb.WsDepthEvent {
 }
 
 func GrpcToMongoEvent(event *pb.WsDepthEvent) *model.WsDepthEvent {
-	// Allocate slices for bids and asks with the correct length.
 	bids := make([]model.Bid, len(event.Bids))
 	for i, bid := range event.Bids {
-		// Assuming bid.Price and bid.Quantity are the correct fields and types.
-		// Directly assign to the slice without using pointers since model.Bid is a type alias for PriceLevel, not a pointer.
 		bids[i] = model.Bid{Price: bid.Price, Quantity: bid.Quantity}
 	}
 

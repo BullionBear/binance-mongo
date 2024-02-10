@@ -8,6 +8,12 @@ LDFLAGS := -X '${PACKAGE}/env.Version=${VERSION}' \
            -X '${PACKAGE}/env.CommitHash=${COMMIT_HASH}' \
            -X '${PACKAGE}/env.BuildTime=${BUILD_TIMESTAMP}'
 
+initdb:
+	go run ./mongo/initMongo.go
+
+genproto:
+	protoc --go_out=. --go-grpc_out=. streaming.proto
+
 build:
 	go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-server cmd/server/*.go
 	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-server-linux-arm64 cmd/server/*.go
