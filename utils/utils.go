@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"time"
+
 	pb "github.com/BullionBear/binance-mongo/generated/proto/depth"
 	"github.com/BullionBear/binance-mongo/model"
 	"github.com/adshao/go-binance/v2"
@@ -41,7 +43,7 @@ func GrpcToMongoEvent(event *pb.WsDepthEvent) *model.WsDepthEvent {
 	// Return a pointer to the constructed WsDepthEvent, filled with the converted slices.
 	return &model.WsDepthEvent{
 		Event:         event.Event,
-		Time:          event.Time,
+		Time:          time.Unix(0, event.Time*int64(time.Millisecond)),
 		Symbol:        event.Symbol,
 		LastUpdateID:  event.LastUpdateID,
 		FirstUpdateID: event.FirstUpdateID,

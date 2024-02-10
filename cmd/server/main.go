@@ -4,8 +4,10 @@ import (
 	"context"
 	"flag"
 	"net"
+	"time"
 
 	pb "github.com/BullionBear/binance-mongo/generated/proto/depth"
+	"github.com/BullionBear/binance-mongo/utils"
 	"github.com/golang/glog"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -22,22 +24,41 @@ type server struct {
 }
 
 func (s *server) StreamDepthEvent(stream pb.DepthEventService_StreamDepthEventServer) error {
-	collection := s.db.Collection("depth")
-	for {
-		in, err := stream.Recv()
-		if err != nil {
-			glog.Infof("Finished receiving depth events: %v", err)
-			break // Exit loop if stream is closed by client
+	collection := s.db.Collection("wsDepthEvents")
+	var buffer []interface{}
+	ticker := time.NewTicker(5 * time.Second)
+	defer ticker.Stop()
+
+	go func() {
+		for range ticker.C {
+			glog.Info("Insert documents: %v", len(buffer))
+			if len(buffer) > 0 {
+				_, insertErr := collection.InsertMany(context.Background(), buffer)
+				if insertErr != nil {
+					glog.Errorf("Failed to insert depth events into MongoDB: %v", insertErr)
+				}
+				// Clear the buffer after insertion
+				buffer = nil
+			}
 		}
-		glog.Infof("Received event: %v", in)
-		// Insert the event into MongoDB
-		_, insertErr := collection.InsertOne(context.Background(), in)
-		if insertErr != nil {
-			glog.Errorf("Failed to insert depth event into MongoDB: %v", insertErr)
+	}()
+
+	for {
+		select {
+		case <-stream.Context().Done():
+			glog.Info("Stream closed by client")
+			return nil
+		default:
+			in, err := stream.Recv()
+			if err != nil {
+				glog.Infof("Finished receiving depth events: %v", err)
+				return nil // Exit loop if stream is closed by client
+			}
+			doc := utils.GrpcToMongoEvent(in)
+			glog.Infof("Received event: %v", doc)
+			buffer = append(buffer, doc)
 		}
 	}
-	// Send a single response after all messages are received
-	return stream.SendAndClose(&pb.StreamDepthEventResponse{Message: "Events Received"})
 }
 
 func main() {
