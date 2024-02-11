@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package depthresponse;
+
+// Specify the Go package where the generated files should be placed.
+option go_package = "./generated/proto/rst_depth";
+
+// The depth event message
+message DepthResponse {
+  int64 lastUpdateID = 1;
+  string symbol = 2;
+  repeated Bid bids = 3;
+  repeated Ask asks = 4;
+}
+
+message Bid {
+  string price = 1;
+  string quantity = 2;
+}
+
+message Ask {
+  string price = 1;
+  string quantity = 2;
+}
+
+// The service definition
+service DepthResponseService {
+  rpc StreamDepthResponse(stream DepthResponse) returns (StreamDepthResponseReply);
+}
+
+message StreamDepthResponseReply {
+  string message = 1;
+}

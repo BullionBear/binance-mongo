@@ -23,3 +23,10 @@ type WsDepthEvent struct {
 	Bids          []Bid     `json:"b" bson:"b"`
 	Asks          []Ask     `json:"a" bson:"a"`
 }
+
+type DepthResponse struct {
+	LastUpdateID int64  `json:"lastUpdateId" bson:"lastUpdateId"`
+	Symbol       string `json:"symbol" bson:"symbol"`
+	Bids         []Bid  `json:"bids" bson:"bids"`
+	Asks         []Ask  `json:"asks" bson:"bids"`
+}

@@ -12,7 +12,7 @@ initdb:
 	go run ./mongo/initMongo.go
 
 genproto:
-	protoc --go_out=. --go-grpc_out=. streaming.proto
+	protoc --go_out=. --go-grpc_out=. protocols/rst_depth.proto
 
 build:
 	go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-server cmd/server/*.go

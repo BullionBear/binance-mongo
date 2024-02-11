@@ -34,7 +34,7 @@ func main() {
 
 	// Connect to Binance WebSocket for depth events.
 	doneC, _, err := binance.WsDepthServe(*symbol, func(event *binance.WsDepthEvent) {
-		grpcEvent := utils.BinanceToGrpcEvent(event)
+		grpcEvent := utils.BinanceWsDepthToGrpcEvent(event)
 		if err := stream.Send(grpcEvent); err != nil {
 			glog.Errorf("Failed to send depth event to gRPC server: %v", err)
 		} else {

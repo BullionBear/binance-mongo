@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	pb "github.com/BullionBear/binance-mongo/generated/proto/depth"
+	pb "github.com/BullionBear/binance-mongo/generated/proto/rst_depth"
 	"github.com/BullionBear/binance-mongo/utils"
 	"github.com/golang/glog"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -39,8 +39,8 @@ func (s *server) flushBuffer(buffer *[]interface{}, collection *mongo.Collection
 	}
 }
 
-func (s *server) StreamDepthEvent(stream pb.DepthEventService_StreamDepthEventServer) error {
-	collection := s.db.Collection("wsDepthEvents")
+func (s *server) StreamDepthEvent(stream pb.DepthResponseService_StreamDepthResponseServer) error {
+	collection := s.db.Collection("rstDepthResponses")
 	buffer := make([]interface{}, 0, 1024) // Preallocate buffer with estimated capacity
 	ticker := time.NewTicker(15 * time.Second)
 	defer ticker.Stop()
@@ -60,7 +60,7 @@ func (s *server) StreamDepthEvent(stream pb.DepthEventService_StreamDepthEventSe
 				s.flushBuffer(&buffer, collection) // Ensure buffer is flushed before exiting
 				return nil
 			}
-			doc := utils.BinanceWsDepthToGrpcEvent(in)
+			doc := utils.GrpcToMongoEvent(in)
 			// glog.Infof("Received event: %v", doc)
 
 			s.mu.Lock()
