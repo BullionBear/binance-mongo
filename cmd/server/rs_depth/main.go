@@ -20,7 +20,7 @@ var (
 )
 
 type server struct {
-	pb.UnimplementedDepthEventServiceServer
+	pb.UnimplementedDepthResponseServiceServer
 	db *mongo.Database
 	mu sync.Mutex // Mutex to protect the buffer
 }
@@ -39,7 +39,7 @@ func (s *server) flushBuffer(buffer *[]interface{}, collection *mongo.Collection
 	}
 }
 
-func (s *server) StreamDepthEvent(stream pb.DepthResponseService_StreamDepthResponseServer) error {
+func (s *server) StreamDepthResponse(stream pb.DepthResponseService_StreamDepthResponseServer) error {
 	collection := s.db.Collection("rstDepthResponses")
 	buffer := make([]interface{}, 0, 1024) // Preallocate buffer with estimated capacity
 	ticker := time.NewTicker(15 * time.Second)
@@ -60,7 +60,7 @@ func (s *server) StreamDepthEvent(stream pb.DepthResponseService_StreamDepthResp
 				s.flushBuffer(&buffer, collection) // Ensure buffer is flushed before exiting
 				return nil
 			}
-			doc := utils.GrpcToMongoEvent(in)
+			doc := utils.GrpcDepthToMongoEvent(in)
 			// glog.Infof("Received event: %v", doc)
 
 			s.mu.Lock()
@@ -93,7 +93,7 @@ func main() {
 		glog.Fatalf("Failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
-	pb.RegisterDepthEventServiceServer(s, &server{db: db})
+	pb.RegisterDepthResponseServiceServer(s, &server{db: db})
 	if err := s.Serve(lis); err != nil {
 		glog.Fatalf("Failed to serve: %v", err)
 	}

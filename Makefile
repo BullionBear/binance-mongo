@@ -12,6 +12,7 @@ initdb:
 	go run ./mongo/initMongo.go
 
 genproto:
+	protoc --go_out=. --go-grpc_out=. protocols/ws_depth.proto
 	protoc --go_out=. --go-grpc_out=. protocols/rst_depth.proto
 
 build:

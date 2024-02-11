@@ -3,7 +3,7 @@ syntax = "proto3";
 package depthevent;
 
 // Specify the Go package where the generated files should be placed.
-option go_package = "./generated/proto/depth";
+option go_package = "./generated/proto/ws_depth";
 
 // The depth event message
 message WsDepthEvent {
