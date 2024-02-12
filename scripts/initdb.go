@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"log"
 	"time"
 
@@ -21,6 +22,7 @@ func collectionExists(ctx context.Context, db *mongo.Database, name string) bool
 }
 
 func main() {
+	flag.Parse() // Parse flags for glog
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
