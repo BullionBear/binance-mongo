@@ -5,6 +5,8 @@ import (
 	"log"
 	"time"
 
+	"github.com/BullionBear/binance-mongo/env"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -13,7 +15,7 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27016"))
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(env.MongoURL))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -29,14 +31,36 @@ func main() {
 		log.Fatal(err)
 	}
 
+	log.Println("Setup collection wsDepthEvents successfully.")
+
 	// Create additional indexes
-	// indexModel := mongo.IndexModel{
-	// 	Keys:    bson.D{{"Bids.Price", 1}}, // Example index
-	// 	Options: options.Index().SetUnique(false),
-	// }
-	// if _, err := db.Collection("depthEvents").Indexes().CreateOne(ctx, indexModel); err != nil {
-	// 	log.Fatal(err)
-	// }
+	indexModel := mongo.IndexModel{
+		Keys: bson.M{
+			"s": 1,
+		},
+		Options: options.Index().SetUnique(false),
+	}
+	if _, err := db.Collection("wsDepthEvents").Indexes().CreateOne(ctx, indexModel); err != nil {
+		log.Fatal(err)
+	}
+
+	collOptions = options.CreateCollection()
+
+	if err := db.CreateCollection(ctx, "rstDepthResponses", collOptions); err != nil {
+		log.Fatal(err)
+	}
+
+	// Create additional indexes
+	indexModel = mongo.IndexModel{
+		Keys: bson.M{
+			"lastUpdateId": 1,
+			"symbol":       1,
+		},
+		Options: options.Index().SetUnique(true),
+	}
+	if _, err := db.Collection("rstDepthResponses").Indexes().CreateOne(ctx, indexModel); err != nil {
+		log.Fatal(err)
+	}
 
 	log.Println("MongoDB setup completed successfully.")
 }
