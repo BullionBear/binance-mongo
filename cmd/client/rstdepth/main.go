@@ -66,7 +66,7 @@ func main() {
 			glog.Info("Application stopped.")
 			return
 		case <-ticker.C:
-			res, err := bclient.NewDepthService().Symbol(*symbol).
+			res, err := bclient.NewDepthService().Symbol(*symbol).Limit(50).
 				Do(context.Background())
 			if err != nil {
 				glog.Error(err)
