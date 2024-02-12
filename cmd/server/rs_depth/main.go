@@ -8,6 +8,7 @@ import (
 	"time"
 
 	pb "github.com/BullionBear/binance-mongo/generated/proto/rstdepth"
+	"github.com/BullionBear/binance-mongo/generated/proto/wsdepth"
 	"github.com/BullionBear/binance-mongo/utils"
 	"github.com/golang/glog"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -16,7 +17,7 @@ import (
 )
 
 var (
-	mongoURL = flag.String("mongoURL", "mongodb://localhost:27017", "MongoDB URL")
+	mongoURL = flag.String("mongoURL", "mongodb://localhost:27016", "MongoDB URL")
 )
 
 type server struct {
@@ -93,7 +94,7 @@ func main() {
 		glog.Fatalf("Failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
-	pb.RegisterDepthResponseServiceServer(s, &server{db: db})
+	pb.RegisterDepthResponseServiceServer(s, &wsdepth.Server{db: db})
 	if err := s.Serve(lis); err != nil {
 		glog.Fatalf("Failed to serve: %v", err)
 	}
