@@ -23,7 +23,7 @@ func main() {
 	utils.PrintEnv("Server")
 	flag.Parse()
 	glog.Infoln("Host on: ", "tcp:50051")
-	glog.Infoln("MongoDB URL: ", &mongoURL)
+	glog.Infoln("MongoDB URL: ", *mongoURL)
 	defer glog.Flush()
 
 	clientOptions := options.Client().ApplyURI(*mongoURL)
