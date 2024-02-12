@@ -13,20 +13,21 @@ import (
 	"github.com/adshao/go-binance/v2"
 	"github.com/golang/glog"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 func main() {
-	utils.PrintEnv("Client RST")
 	symbol := flag.String("symbol", "BTCUSDT", "Trading symbol")
 	grpcServerAddr := flag.String("grpc-server", "localhost:50051", "gRPC server address")
-	glog.Infoln("Symbol: ", symbol)
-	glog.Infoln("Connect to: ", grpcServerAddr)
 
 	flag.Parse() // Parse flags
+	utils.PrintEnv("Client RST")
+	glog.Infoln("Symbol: ", symbol)
+	glog.Infoln("Connect to: ", grpcServerAddr)
 	defer glog.Flush()
 
 	// Establish a connection to the server.
-	conn, err := grpc.Dial(*grpcServerAddr, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(*grpcServerAddr, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
 	if err != nil {
 		glog.Fatalf("did not connect: %v", err)
 	}

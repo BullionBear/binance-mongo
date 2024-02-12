@@ -20,8 +20,8 @@ var (
 )
 
 func main() {
-	utils.PrintEnv("Server")
 	flag.Parse()
+	utils.PrintEnv("Server")
 	glog.Infoln("Host on: ", "tcp:50051")
 	glog.Infoln("MongoDB URL: ", *mongoURL)
 	defer glog.Flush()

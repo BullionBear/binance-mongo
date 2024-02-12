@@ -43,11 +43,11 @@ model.WsDepthEvent is the custom type to control the mongoDB's field, the conten
 ## Production
 Run server
 ```
-nohup ./bin/bmgo-server-linux-x86 -v=2 -log_dir="logs/" >/dev/null 2>&1 &
+nohup ./bin/bmgo-server-linux-x86 -log_dir="./logs/" -stderrthreshold=INFO -vmodule=file=2 >/dev/null 2>&1 &
 ```
 
 Run client
 ```
-nohup ./bin/bmgo-wsdepth-linux-x86 -v=2 -log_dir="logs/" >/dev/null 2>&1 &
-nohup ./bin/bmgo-rstdepth-linux-x86 -v=2 -log_dir="logs/" >/dev/null 2>&1 &
+nohup ./bin/bmgo-wsdepth-linux-x86 -log_dir="./logs/" -stderrthreshold=INFO -vmodule=file=2 >/dev/null 2>&1 &
+nohup ./bin/bmgo-rstdepth-linux-x86 -log_dir="./logs/" -stderrthreshold=INFO -vmodule=file=2 >/dev/null 2>&1 &
 ```
