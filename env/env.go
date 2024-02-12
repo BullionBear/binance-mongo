@@ -7,5 +7,5 @@ var (
 )
 
 var (
-	MongoURL string = "mongo://localhost:27017"
+	MongoURL string = "mongodb://localhost:27017"
 )
