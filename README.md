@@ -48,6 +48,6 @@ nohup ./bin/bmgo-server-linux-x86 -log_dir="./logs/" -stderrthreshold=INFO -vmod
 
 Run client
 ```
-nohup ./bin/bmgo-wsdepth-linux-x86 -log_dir="./logs/" -stderrthreshold=INFO -vmodule=file=2 >/dev/null 2>&1 &
-nohup ./bin/bmgo-rstdepth-linux-x86 -log_dir="./logs/" -stderrthreshold=INFO -vmodule=file=2 >/dev/null 2>&1 &
+nohup ./bin/bmgo-wsdepth-linux-x86 -log_dir="./logs/" -stderrthreshold=INFO -vmodule=file=2 -symbol=BTCUSDT >/dev/null 2>&1 &
+nohup ./bin/bmgo-rstdepth-linux-x86 -log_dir="./logs/" -stderrthreshold=INFO -vmodule=file=2 -symbol=BTCUSDT >/dev/null 2>&1 &
 ```
