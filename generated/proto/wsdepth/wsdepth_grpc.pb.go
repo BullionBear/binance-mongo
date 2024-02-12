@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v4.25.2
-// source: protocols/ws_depth.proto
+// source: protocols/wsdepth.proto
 
-package ws_depth
+package wsdepth
 
 import (
 	context "context"
@@ -139,5 +139,5 @@ var DepthEventService_ServiceDesc = grpc.ServiceDesc{
 			ClientStreams: true,
 		},
 	},
-	Metadata: "protocols/ws_depth.proto",
+	Metadata: "protocols/wsdepth.proto",
 }

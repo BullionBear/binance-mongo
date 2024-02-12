@@ -4,7 +4,7 @@ import (
 	"context"
 	"flag"
 
-	pb "github.com/BullionBear/binance-mongo/generated/proto/ws_depth"
+	pb "github.com/BullionBear/binance-mongo/generated/proto/wsdepth"
 	"github.com/BullionBear/binance-mongo/utils"
 	"github.com/adshao/go-binance/v2"
 	"github.com/golang/glog"

@@ -3,7 +3,7 @@ syntax = "proto3";
 package depthresponse;
 
 // Specify the Go package where the generated files should be placed.
-option go_package = "./generated/proto/rst_depth";
+option go_package = "./generated/proto/rstdepth";
 
 // The depth event message
 message DepthResponse {

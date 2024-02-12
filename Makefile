@@ -12,8 +12,8 @@ initdb:
 	go run ./mongo/initdb.go
 
 genproto:
-	protoc --go_out=. --go-grpc_out=. protocols/ws_depth.proto
-	protoc --go_out=. --go-grpc_out=. protocols/rst_depth.proto
+	protoc --go_out=. --go-grpc_out=. protocols/wsdepth.proto
+	protoc --go_out=. --go-grpc_out=. protocols/rstdepth.proto
 
 build:
 	go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-server cmd/server/*.go

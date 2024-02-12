@@ -1,7 +1,7 @@
 package utils
 
 import (
-	pb "github.com/BullionBear/binance-mongo/generated/proto/rst_depth"
+	pb "github.com/BullionBear/binance-mongo/generated/proto/rstdepth"
 	"github.com/BullionBear/binance-mongo/model"
 	"github.com/adshao/go-binance/v2"
 )

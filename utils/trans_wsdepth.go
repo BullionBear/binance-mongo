@@ -3,7 +3,7 @@ package utils
 import (
 	"time"
 
-	pb "github.com/BullionBear/binance-mongo/generated/proto/ws_depth"
+	pb "github.com/BullionBear/binance-mongo/generated/proto/wsdepth"
 	"github.com/BullionBear/binance-mongo/model"
 	"github.com/adshao/go-binance/v2"
 )

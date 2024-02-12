@@ -8,7 +8,7 @@ import (
 	"syscall"
 	"time"
 
-	pb "github.com/BullionBear/binance-mongo/generated/proto/rst_depth"
+	pb "github.com/BullionBear/binance-mongo/generated/proto/rstdepth"
 	"github.com/BullionBear/binance-mongo/utils"
 	"github.com/adshao/go-binance/v2"
 	"github.com/golang/glog"

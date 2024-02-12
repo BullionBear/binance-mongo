@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	pb "github.com/BullionBear/binance-mongo/generated/proto/rst_depth"
+	pb "github.com/BullionBear/binance-mongo/generated/proto/rstdepth"
 	"github.com/BullionBear/binance-mongo/utils"
 	"github.com/golang/glog"
 	"go.mongodb.org/mongo-driver/mongo"

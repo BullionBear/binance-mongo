@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v4.25.2
-// source: protocols/rst_depth.proto
+// source: protocols/rstdepth.proto
 
-package rst_depth
+package rstdepth
 
 import (
 	context "context"
@@ -139,5 +139,5 @@ var DepthResponseService_ServiceDesc = grpc.ServiceDesc{
 			ClientStreams: true,
 		},
 	},
-	Metadata: "protocols/rst_depth.proto",
+	Metadata: "protocols/rstdepth.proto",
 }
