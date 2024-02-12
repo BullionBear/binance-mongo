@@ -5,8 +5,6 @@ import (
 	"flag"
 	"net"
 
-	pb2 "github.com/BullionBear/binance-mongo/generated/proto/rstdepth"
-	pb "github.com/BullionBear/binance-mongo/generated/proto/wsdepth"
 	"github.com/BullionBear/binance-mongo/services/rstdepth"
 	"github.com/BullionBear/binance-mongo/services/wsdepth"
 	"github.com/golang/glog"
@@ -37,8 +35,8 @@ func main() {
 		glog.Fatalf("Failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
-	pb.RegisterDepthEventServiceServer(s, &wsdepth.Server{Db: db})
-	pb2.RegisterDepthResponseServiceServer(s, &rstdepth.Server{Db: db})
+	wsdepth.Register(s, &wsdepth.Server{Db: db})
+	rstdepth.Register(s, &rstdepth.Server{Db: db})
 	if err := s.Serve(lis); err != nil {
 		glog.Fatalf("Failed to serve: %v", err)
 	}

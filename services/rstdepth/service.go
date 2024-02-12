@@ -1,11 +1,11 @@
-package wsdepth
+package rstdepth
 
 import (
 	"context"
 	"sync"
 	"time"
 
-	pb "github.com/BullionBear/binance-mongo/generated/proto/wsdepth"
+	pb "github.com/BullionBear/binance-mongo/generated/proto/rstdepth"
 	"github.com/BullionBear/binance-mongo/model"
 	"github.com/golang/glog"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -13,13 +13,13 @@ import (
 )
 
 type Server struct {
-	pb.UnimplementedDepthEventServiceServer
+	pb.UnimplementedDepthResponseServiceServer
 	Db *mongo.Database
 	mu sync.Mutex // Mutex to protect the buffer
 }
 
-func (s *Server) StreamDepthEvent(stream pb.DepthEventService_StreamDepthEventServer) error {
-	collection := s.Db.Collection("wsDepthEvents")
+func (s *Server) StreamDepthResponse(stream pb.DepthResponseService_StreamDepthResponseServer) error {
+	collection := s.Db.Collection("rstDepthResponses")
 	buffer := make([]interface{}, 0, 1024) // Preallocate buffer with estimated capacity
 	ticker := time.NewTicker(15 * time.Second)
 	defer ticker.Stop()
@@ -55,7 +55,7 @@ func (s *Server) StreamDepthEvent(stream pb.DepthEventService_StreamDepthEventSe
 }
 
 func Register(grpc *grpc.Server, s *Server) {
-	pb.RegisterDepthEventServiceServer(grpc, s)
+	pb.RegisterDepthResponseServiceServer(grpc, s)
 	return
 }
 
@@ -73,7 +73,7 @@ func (s *Server) flushBuffer(buffer *[]interface{}, collection *mongo.Collection
 	}
 }
 
-func toDoc(event *pb.WsDepthEvent) *model.WsDepthEvent {
+func toDoc(event *pb.DepthResponse) *model.DepthResponse {
 	bids := make([]model.Bid, len(event.Bids))
 	for i, bid := range event.Bids {
 		bids[i] = model.Bid{Price: bid.Price, Quantity: bid.Quantity}
@@ -86,13 +86,10 @@ func toDoc(event *pb.WsDepthEvent) *model.WsDepthEvent {
 	}
 
 	// Return a pointer to the constructed WsDepthEvent, filled with the converted slices.
-	return &model.WsDepthEvent{
-		Event:         event.Event,
-		Time:          time.Unix(0, event.Time*int64(time.Millisecond)),
-		Symbol:        event.Symbol,
-		LastUpdateID:  event.LastUpdateID,
-		FirstUpdateID: event.FirstUpdateID,
-		Bids:          bids,
-		Asks:          asks,
+	return &model.DepthResponse{
+		LastUpdateID: event.LastUpdateID,
+		Symbol:       event.Symbol,
+		Bids:         bids,
+		Asks:         asks,
 	}
 }
