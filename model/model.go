@@ -28,5 +28,5 @@ type DepthResponse struct {
 	LastUpdateID int64  `json:"lastUpdateId" bson:"lastUpdateId"`
 	Symbol       string `json:"symbol" bson:"symbol"`
 	Bids         []Bid  `json:"bids" bson:"bids"`
-	Asks         []Ask  `json:"asks" bson:"bids"`
+	Asks         []Ask  `json:"asks" bson:"asks"`
 }
