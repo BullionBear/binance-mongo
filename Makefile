@@ -17,11 +17,11 @@ genproto:
 
 build:
 	go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-server cmd/server/*.go
-	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-server-linux-arm64 cmd/server/*.go
+	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-server-linux-x86 cmd/server/*.go
 	go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-rstdepth cmd/client/rstdepth/*.go
-	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-rstdepth-linux-arm64 cmd/client/rstdepth/*.go
+	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-rstdepth-linux-x86 cmd/client/rstdepth/*.go
 	go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-wsdepth cmd/client/wsdepth/*.go
-	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-wsdepth-linux-arm64 cmd/client/wsdepth/*.go
+	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-wsdepth-linux-x86 cmd/client/wsdepth/*.go
 
 server-run:
 	./bin/$(BINARY)-server -logtostderr=true -v=2
