@@ -18,14 +18,19 @@ genproto:
 build:
 	go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-server cmd/server/*.go
 	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-server-linux-arm64 cmd/server/*.go
-	go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-client cmd/client/*.go
-	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-client-linux-arm64 cmd/client/*.go
+	go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-rstdepth cmd/client/rstdepth/*.go
+	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-rstdepth-linux-arm64 cmd/client/rstdepth/*.go
+	go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-wsdepth cmd/client/wsdepth/*.go
+	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-wsdepth-linux-arm64 cmd/client/wsdepth/*.go
 
 server-run:
 	./bin/$(BINARY)-server -logtostderr=true -v=2
 
-client-run:
-	./bin/$(BINARY)-client -logtostderr=true -v=2 -symbol=BTCUSDT
+wsdepth-run:
+	./bin/$(BINARY)-wsdepth -logtostderr=true -v=2 -symbol=BTCUSDT
+
+rstdepth-run:
+	./bin/$(BINARY)-rstdepth -logtostderr=true -v=2 -symbol=BTCUSDT
 
 clean:
 	rm -rf bin/*
