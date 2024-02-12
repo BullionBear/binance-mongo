@@ -34,5 +34,6 @@ rstdepth-run:
 
 clean:
 	rm -rf bin/*
+	rm -rf logs/*
 
 # .PHONY: clean, build, run
