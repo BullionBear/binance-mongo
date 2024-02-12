@@ -3,12 +3,12 @@ package utils
 import (
 	"time"
 
-	pb "github.com/BullionBear/binance-mongo/generated/proto/depth"
+	pb "github.com/BullionBear/binance-mongo/generated/proto/wsdepth"
 	"github.com/BullionBear/binance-mongo/model"
 	"github.com/adshao/go-binance/v2"
 )
 
-func BinanceToGrpcEvent(event *binance.WsDepthEvent) *pb.WsDepthEvent {
+func BinanceWsDepthToGrpcEvent(event *binance.WsDepthEvent) *pb.WsDepthEvent {
 	bids := make([]*pb.Bid, len(event.Bids))
 	for i, bid := range event.Bids {
 		bids[i] = &pb.Bid{Price: bid.Price, Quantity: bid.Quantity}
@@ -28,7 +28,7 @@ func BinanceToGrpcEvent(event *binance.WsDepthEvent) *pb.WsDepthEvent {
 	}
 }
 
-func GrpcToMongoEvent(event *pb.WsDepthEvent) *model.WsDepthEvent {
+func GrpcWsDepthToMongoEvent(event *pb.WsDepthEvent) *model.WsDepthEvent {
 	bids := make([]model.Bid, len(event.Bids))
 	for i, bid := range event.Bids {
 		bids[i] = model.Bid{Price: bid.Price, Quantity: bid.Quantity}

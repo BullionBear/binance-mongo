@@ -4,7 +4,7 @@ import (
 	"context"
 	"flag"
 
-	pb "github.com/BullionBear/binance-mongo/generated/proto/depth"
+	pb "github.com/BullionBear/binance-mongo/generated/proto/wsdepth"
 	"github.com/BullionBear/binance-mongo/utils"
 	"github.com/adshao/go-binance/v2"
 	"github.com/golang/glog"
@@ -34,7 +34,7 @@ func main() {
 
 	// Connect to Binance WebSocket for depth events.
 	doneC, _, err := binance.WsDepthServe(*symbol, func(event *binance.WsDepthEvent) {
-		grpcEvent := utils.BinanceToGrpcEvent(event)
+		grpcEvent := utils.BinanceWsDepthToGrpcEvent(event)
 		if err := stream.Send(grpcEvent); err != nil {
 			glog.Errorf("Failed to send depth event to gRPC server: %v", err)
 		} else {

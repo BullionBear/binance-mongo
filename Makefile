@@ -9,22 +9,28 @@ LDFLAGS := -X '${PACKAGE}/env.Version=${VERSION}' \
            -X '${PACKAGE}/env.BuildTime=${BUILD_TIMESTAMP}'
 
 initdb:
-	go run ./mongo/initMongo.go
+	go run ./mongo/initdb.go
 
 genproto:
-	protoc --go_out=. --go-grpc_out=. streaming.proto
+	protoc --go_out=. --go-grpc_out=. protocols/wsdepth.proto
+	protoc --go_out=. --go-grpc_out=. protocols/rstdepth.proto
 
 build:
 	go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-server cmd/server/*.go
 	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-server-linux-arm64 cmd/server/*.go
-	go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-client cmd/client/*.go
-	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-client-linux-arm64 cmd/client/*.go
+	go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-rstdepth cmd/client/rstdepth/*.go
+	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-rstdepth-linux-arm64 cmd/client/rstdepth/*.go
+	go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-wsdepth cmd/client/wsdepth/*.go
+	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-wsdepth-linux-arm64 cmd/client/wsdepth/*.go
 
 server-run:
 	./bin/$(BINARY)-server -logtostderr=true -v=2
 
-client-run:
-	./bin/$(BINARY)-client -logtostderr=true -v=2 -symbol=BTCUSDT
+wsdepth-run:
+	./bin/$(BINARY)-wsdepth -logtostderr=true -v=2 -symbol=BTCUSDT
+
+rstdepth-run:
+	./bin/$(BINARY)-rstdepth -logtostderr=true -v=2 -symbol=BTCUSDT
 
 clean:
 	rm -rf bin/*
