@@ -5,8 +5,10 @@ import (
 	"flag"
 	"net"
 
+	"github.com/BullionBear/binance-mongo/env"
 	"github.com/BullionBear/binance-mongo/services/rstdepth"
 	"github.com/BullionBear/binance-mongo/services/wsdepth"
+	"github.com/BullionBear/binance-mongo/utils"
 	"github.com/golang/glog"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -14,11 +16,14 @@ import (
 )
 
 var (
-	mongoURL = flag.String("mongoURL", "mongodb://localhost:27016", "MongoDB URL")
+	mongoURL = flag.String("mongoURL", env.MongoURL, "MongoDB URL")
 )
 
 func main() {
+	utils.PrintEnv("Server")
 	flag.Parse()
+	glog.Infoln("Host on: ", "tcp:50051")
+	glog.Infoln("MongoDB URL: ", mongoURL)
 	defer glog.Flush()
 
 	clientOptions := options.Client().ApplyURI(*mongoURL)

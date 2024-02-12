@@ -9,7 +9,7 @@ LDFLAGS := -X '${PACKAGE}/env.Version=${VERSION}' \
            -X '${PACKAGE}/env.BuildTime=${BUILD_TIMESTAMP}'
 
 initdb:
-	go run ./mongo/initdb.go
+	go run ./script/initdb.go
 
 genproto:
 	protoc --go_out=. --go-grpc_out=. protocols/wsdepth.proto

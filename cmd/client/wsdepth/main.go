@@ -12,8 +12,11 @@ import (
 )
 
 func main() {
+	utils.PrintEnv("Client WS")
 	symbol := flag.String("symbol", "BTCUSDT", "Trading symbol")
 	grpcServerAddr := flag.String("grpc-server", "localhost:50051", "gRPC server address")
+	glog.Infoln("Symbol: ", symbol)
+	glog.Infoln("Connect to: ", grpcServerAddr)
 
 	flag.Parse() // Parse flags
 	defer glog.Flush()
@@ -37,8 +40,6 @@ func main() {
 		grpcEvent := utils.BinanceWsDepthToGrpcEvent(event)
 		if err := stream.Send(grpcEvent); err != nil {
 			glog.Errorf("Failed to send depth event to gRPC server: %v", err)
-		} else {
-			glog.Infof("Sent depth event to gRPC server: %v", grpcEvent)
 		}
 	}, func(err error) {
 		glog.Errorf("WebSocket Error: %v", err)

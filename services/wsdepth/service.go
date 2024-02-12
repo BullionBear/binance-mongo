@@ -20,8 +20,8 @@ type Server struct {
 
 func (s *Server) StreamDepthEvent(stream pb.DepthEventService_StreamDepthEventServer) error {
 	collection := s.Db.Collection("wsDepthEvents")
-	buffer := make([]interface{}, 0, 1024) // Preallocate buffer with estimated capacity
-	ticker := time.NewTicker(15 * time.Second)
+	buffer := make([]interface{}, 0, 4096) // Preallocate buffer with estimated capacity
+	ticker := time.NewTicker(10 * time.Second)
 	defer ticker.Stop()
 
 	for {
@@ -44,7 +44,7 @@ func (s *Server) StreamDepthEvent(stream pb.DepthEventService_StreamDepthEventSe
 
 			s.mu.Lock()
 			buffer = append(buffer, doc)
-			if len(buffer) >= 10 {
+			if len(buffer) >= 1024 {
 				s.mu.Unlock() // Unlock before flushing to avoid deadlock
 				s.flushBuffer(&buffer, collection)
 			} else {

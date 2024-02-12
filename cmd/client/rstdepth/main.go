@@ -16,8 +16,11 @@ import (
 )
 
 func main() {
+	utils.PrintEnv("Client RST")
 	symbol := flag.String("symbol", "BTCUSDT", "Trading symbol")
 	grpcServerAddr := flag.String("grpc-server", "localhost:50051", "gRPC server address")
+	glog.Infoln("Symbol: ", symbol)
+	glog.Infoln("Connect to: ", grpcServerAddr)
 
 	flag.Parse() // Parse flags
 	defer glog.Flush()

@@ -6,4 +6,6 @@ var (
 	CommitHash string
 )
 
-type EnvType string
+var (
+	MongoURL string = "mongo://localhost:27017"
+)

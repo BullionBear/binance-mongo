@@ -20,8 +20,8 @@ type Server struct {
 
 func (s *Server) StreamDepthResponse(stream pb.DepthResponseService_StreamDepthResponseServer) error {
 	collection := s.Db.Collection("rstDepthResponses")
-	buffer := make([]interface{}, 0, 1024) // Preallocate buffer with estimated capacity
-	ticker := time.NewTicker(15 * time.Second)
+	buffer := make([]interface{}, 0, 256) // Preallocate buffer with estimated capacity
+	ticker := time.NewTicker(30 * time.Second)
 	defer ticker.Stop()
 
 	for {
