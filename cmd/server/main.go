@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"net"
 
 	"github.com/BullionBear/binance-mongo/env"
@@ -16,11 +17,19 @@ import (
 )
 
 var (
-	mongoURL = flag.String("mongoURL", env.MongoURL, "MongoDB URL")
+	mongoURL    = flag.String("mongoURL", env.MongoURL, "MongoDB URL")
+	versionFlag bool
 )
 
 func main() {
+	flag.BoolVar(&versionFlag, "version", false, "Print the version number")
+
 	flag.Parse()
+	// Display metadata based on flags
+	if versionFlag {
+		fmt.Println("Version:", env.Version)
+		return
+	}
 	utils.PrintEnv("Server")
 	glog.Infoln("Host on: ", "tcp:50051")
 	glog.Infoln("MongoDB URL: ", *mongoURL)
