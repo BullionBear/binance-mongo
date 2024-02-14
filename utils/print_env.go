@@ -6,7 +6,7 @@ import (
 )
 
 func PrintEnv(name string) {
-	// PrintEnv show put after the flag setup
+	// PrintEnv must put after the flag setup
 	glog.Infoln("Process Name: ", name)
 	glog.Infoln("Commit Hash: ", env.CommitHash)
 	glog.Infoln("Version: ", env.Version)
