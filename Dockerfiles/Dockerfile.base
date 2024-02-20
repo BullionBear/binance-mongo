@@ -1,0 +1,17 @@
+# Build stage
+FROM golang:1.22
+
+WORKDIR /bmgo
+
+ENV CGO_ENABLED=0
+
+# Install git and make. Since the official Go image is Debian-based, use apt-get to install these packages.
+RUN apt-get update && apt-get install -y \
+    git \
+    make
+
+# Copy the source code into the container
+COPY go.mod .
+
+# Build the project. Use make prod-build as instructed.
+RUN go get -v -t -d ./...

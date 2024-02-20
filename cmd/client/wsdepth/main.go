@@ -18,8 +18,8 @@ func main() {
 
 	flag.Parse() // Parse flags
 	utils.PrintEnv("Client WS")
-	glog.Infoln("Symbol: ", symbol)
-	glog.Infoln("Connect to: ", grpcServerAddr)
+	glog.Infoln("Symbol: ", *symbol)
+	glog.Infoln("Connect to: ", *grpcServerAddr)
 	defer glog.Flush()
 
 	// Establish a connection to the server.

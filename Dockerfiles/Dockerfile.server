@@ -1,0 +1,26 @@
+# Build stage
+FROM public.ecr.aws/b8k8t3h1/bmgo:base as builder
+
+WORKDIR /bmgo
+
+COPY . .
+
+ENV CGO_ENABLED=0
+
+RUN make server-build
+
+# Runtime stage 
+FROM alpine:latest
+
+WORKDIR /
+
+# Copy the built binary from the builder stage
+COPY --from=builder  /bmgo/bin/bmgo-server-linux-x86 /
+
+# Optionally, if your application needs any runtime dependencies, install them here
+
+ENV MONGO_URL mongodb://bullionbear:Sunshine4Jellybean@localhost:27017/
+
+# Command to run your app
+CMD ./bmgo-server-linux-x86 -logtostderr=true -v=2 -mongoURL=$MONGO_URL
+
