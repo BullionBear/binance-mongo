@@ -22,13 +22,38 @@ docker push public.ecr.aws/b8k8t3h1/bmgo:base
 ```
 
 ## Server container
+### Build
 ```
 docker build -f Dockerfiles/Dockerfile.server -t 179335631601.dkr.ecr.ap-northeast-1.amazonaws.com/bmgo:server-latest .
 ```
 
+### Push
+```
+docker push 179335631601.dkr.ecr.ap-northeast-1.amazonaws.com/bmgo:server-latest
+```
+
 ## Run server container
 ```
-docker run --name bmgo-grpc --rm -e MONGO_URL=mongodb://bullionbear:Sunshine4Jellybean@mongo:27017/ 179335631601.dkr.ecr.ap-northeast-1.amazonaws.com/bmgo:server-latest
+docker run --name bmgo-grpc --rm \
+    -e MONGO_URL=mongodb://bullionbear:Sunshine4Jellybean@lynkora-mongo:27017/ \
+    --network lynkora \
+    179335631601.dkr.ecr.ap-northeast-1.amazonaws.com/bmgo:server-latest
 ```
+
+## Client wsdepth
+### Build
+```
+docker build -f Dockerfiles/Dockerfile.wsdepth -t 179335631601.dkr.ecr.ap-northeast-1.amazonaws.com/bmgo:wsdepth-latest .
+```
+
+### Run wsdepth container
+```
+docker run --name bmgo-wsdepth-btcusdt --rm \
+    -e SYMBOL=BTCUSDT \
+    -e GRPC=bmgo-grpc:50051 \
+    --network lynkora \
+    179335631601.dkr.ecr.ap-northeast-1.amazonaws.com/bmgo:wsdepth-latest
+```
+
 
 
