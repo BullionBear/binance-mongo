@@ -21,3 +21,14 @@ docker build -f Dockerfiles/Dockerfile.base -t public.ecr.aws/b8k8t3h1/bmgo:base
 docker push public.ecr.aws/b8k8t3h1/bmgo:base
 ```
 
+## Server container
+```
+docker build -f Dockerfiles/Dockerfile.server -t 179335631601.dkr.ecr.ap-northeast-1.amazonaws.com/bmgo:server-latest .
+```
+
+## Run server container
+```
+docker run --name bmgo-grpc --rm -e MONGO_URL=mongodb://bullionbear:Sunshine4Jellybean@mongo:27017/ 179335631601.dkr.ecr.ap-northeast-1.amazonaws.com/bmgo:server-latest
+```
+
+
