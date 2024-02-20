@@ -46,6 +46,11 @@ docker run --name bmgo-grpc --rm \
 docker build -f Dockerfiles/Dockerfile.wsdepth -t 179335631601.dkr.ecr.ap-northeast-1.amazonaws.com/bmgo:wsdepth-latest .
 ```
 
+### Push
+```
+docker push 179335631601.dkr.ecr.ap-northeast-1.amazonaws.com/bmgo:wsdepth-latest .
+```
+
 ### Run wsdepth container
 ```
 docker run --name bmgo-wsdepth-btcusdt --rm \
