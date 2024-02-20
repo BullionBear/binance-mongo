@@ -1,0 +1,6 @@
+FROM public.ecr.aws/b8k8t3h1/bmgo:base as builder
+
+COPY . .
+
+RUN make server-build
+
