@@ -41,13 +41,13 @@ pd.WsDepthEvent is the gRPC protocol, should be a 1-1 mapping from binance.WsDep
 model.WsDepthEvent is the custom type to control the mongoDB's field, the content should be related to mongo/initdb.go
 
 ## Production
-Run server
-```
-nohup ./bin/bmgo-server-linux-x86 -log_dir="./logs/" -stderrthreshold=INFO -vmodule=file=2 >/dev/null 2>&1 &
-```
+The app is running on AWS Fargate
 
-Run client
-```
-nohup ./bin/bmgo-wsdepth-linux-x86 -log_dir="./logs/" -stderrthreshold=INFO -vmodule=file=2 -symbol=BTCUSDT >/dev/null 2>&1 &
-nohup ./bin/bmgo-rstdepth-linux-x86 -log_dir="./logs/" -stderrthreshold=INFO -vmodule=file=2 -symbol=BTCUSDT >/dev/null 2>&1 &
-```
+For deployment, the pipeline is
+
+- Push container to ECR
+
+- Create task definition of ECS
+
+- Deploy on ECS Cluster using Fargate
+
