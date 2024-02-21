@@ -52,8 +52,9 @@ model.WsDepthEvent is the custom type to control the mongoDB's field, the conten
 7. Add build command in Makefile
 8. Add new collection in script
 9. Run and test
-10. Add new Dockerfile and push to ECR
-11. Go to Production
+10. Add new Dockerfile in Dockerfiles/
+11. Go to ECR to create a new registry
+12. Go to Production
 
 ## Production
 The app is running on AWS Fargate
