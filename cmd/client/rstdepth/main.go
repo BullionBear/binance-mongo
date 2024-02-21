@@ -33,6 +33,8 @@ func main() {
 	}
 	defer conn.Close()
 	gclient := pb.NewDepthResponseServiceClient(conn)
+
+	utils.EchoClock(30 * time.Second)
 	// Create a stream to the gRPC server.
 	stream, err := gclient.StreamDepthResponse(context.Background())
 	if err != nil {
@@ -73,6 +75,7 @@ func main() {
 				continue
 			}
 			grpcEvent := utils.BinanceDepthToGrpcEvent(res, *symbol)
+			utils.IncrementCounter()
 			if err := stream.Send(grpcEvent); err != nil {
 				glog.Errorf("Failed to send depth event to gRPC server: %v", err)
 			} else {

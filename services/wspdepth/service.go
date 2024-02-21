@@ -18,7 +18,7 @@ type Server struct {
 	mu sync.Mutex // Mutex to protect the buffer
 }
 
-func (s *Server) StreamDepthEvent(stream pb.PartialDepthEventService_StreamPartialDepthEventServer) error {
+func (s *Server) StreamPartialDepthEvent(stream pb.PartialDepthEventService_StreamPartialDepthEventServer) error {
 	collection := s.Db.Collection("wsPartialDepthEvents") // Should be the only difference between wsdepth
 	buffer := make([]interface{}, 0, 4096)                // Preallocate buffer with estimated capacity
 	ticker := time.NewTicker(10 * time.Second)

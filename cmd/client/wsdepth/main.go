@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"time"
 
 	pb "github.com/BullionBear/binance-mongo/generated/proto/wsdepth"
 	"github.com/BullionBear/binance-mongo/utils"
@@ -36,9 +37,12 @@ func main() {
 		glog.Fatalf("could not create stream: %v", err)
 	}
 
+	utils.EchoClock(30 * time.Second)
+
 	// Connect to Binance WebSocket for depth events.
 	doneC, _, err := binance.WsDepthServe100Ms(*symbol, func(event *binance.WsDepthEvent) {
 		grpcEvent := utils.BinanceWsDepthToGrpcEvent(event)
+		utils.IncrementCounter()
 		if err := stream.Send(grpcEvent); err != nil {
 			glog.Errorf("Failed to send depth event to gRPC server: %v", err)
 		}
