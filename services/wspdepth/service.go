@@ -19,7 +19,7 @@ type Server struct {
 }
 
 func (s *Server) StreamPartialDepthEvent(stream pb.PartialDepthEventService_StreamPartialDepthEventServer) error {
-	collection := s.Db.Collection("wsPartialDepthEvents") // Should be the only difference between wsdepth
+	collection := s.Db.Collection("wsDepthPartialEvents") // Should be the only difference between wsdepth
 	buffer := make([]interface{}, 0, 4096)                // Preallocate buffer with estimated capacity
 	ticker := time.NewTicker(10 * time.Second)
 	defer ticker.Stop()
