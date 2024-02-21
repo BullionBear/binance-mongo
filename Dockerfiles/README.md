@@ -60,5 +60,25 @@ docker run --name bmgo-wsdepth-btcusdt --rm \
     179335631601.dkr.ecr.ap-northeast-1.amazonaws.com/bmgo:wsdepth-latest
 ```
 
+## Client wspdepth
+### Build
+```
+docker build -f Dockerfiles/Dockerfile.wspdepth -t 179335631601.dkr.ecr.ap-northeast-1.amazonaws.com/bmgo:wspdepth-latest .
+```
+
+### Push
+```
+docker push 179335631601.dkr.ecr.ap-northeast-1.amazonaws.com/bmgo:wspdepth-latest .
+```
+
+### Run wsdepth container
+```
+docker run --name bmgo-wspdepth-btcusdt --rm \
+    -e SYMBOL=BTCUSDT \
+    -e GRPC=bmgo-grpc:50051 \
+    --network lynkora \
+    179335631601.dkr.ecr.ap-northeast-1.amazonaws.com/bmgo:wspdepth-latest
+```
+
 
 

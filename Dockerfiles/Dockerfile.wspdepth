@@ -1,0 +1,26 @@
+# Build stage
+FROM public.ecr.aws/b8k8t3h1/bmgo:base as builder
+
+WORKDIR /bmgo
+
+COPY . .
+
+ENV CGO_ENABLED=0
+
+RUN make wspdepth-build
+
+# Runtime stage 
+FROM alpine:latest
+
+WORKDIR /
+
+# Copy the built binary from the builder stage
+COPY --from=builder  /bmgo/bin/bmgo-wspdepth-linux-x86 /
+
+# Optionally, if your application needs any runtime dependencies, install them here
+
+ENV SYMBOL BTCUSDT
+ENV GRPC localhost:50051
+
+# Command to run your app
+CMD ./bmgo-wsdepth-linux-x86 -logtostderr=true -v=2 -grpc-server=$GRPC -symbol=$SYMBOL
