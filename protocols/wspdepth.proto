@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package pdepthevent;
+
+// Specify the Go package where the generated files should be placed.
+option go_package = "./generated/proto/wspdepth";
+
+// The depth event message
+message WsPartialDepthEvent {
+  string symbol = 1;
+  int64 lastUpdateID = 2;
+  repeated Bid bids = 3;
+  repeated Ask asks = 4;
+}
+
+message Bid {
+  string price = 1;
+  string quantity = 2;
+}
+
+message Ask {
+  string price = 1;
+  string quantity = 2;
+}
+
+// The service definition
+service PartialDepthEventService {
+  rpc StreamPartialDepthEvent(stream WsPartialDepthEvent) returns (StreamDepthEventResponse);
+}
+
+message StreamDepthEventResponse {
+  string message = 1;
+}

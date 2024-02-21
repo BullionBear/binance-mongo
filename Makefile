@@ -14,6 +14,7 @@ initdb:
 genproto:
 	protoc --go_out=. --go-grpc_out=. protocols/wsdepth.proto
 	protoc --go_out=. --go-grpc_out=. protocols/rstdepth.proto
+	protoc --go_out=. --go-grpc_out=. protocols/wspdepth.proto
 
 build:
 	go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-server cmd/server/*.go
