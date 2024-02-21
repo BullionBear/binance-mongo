@@ -8,6 +8,7 @@ import (
 	"github.com/BullionBear/binance-mongo/env"
 	"github.com/BullionBear/binance-mongo/services/rstdepth"
 	"github.com/BullionBear/binance-mongo/services/wsdepth"
+	"github.com/BullionBear/binance-mongo/services/wspdepth"
 	"github.com/BullionBear/binance-mongo/utils"
 	"github.com/golang/glog"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -42,6 +43,7 @@ func main() {
 	s := grpc.NewServer()
 	wsdepth.Register(s, &wsdepth.Server{Db: db})
 	rstdepth.Register(s, &rstdepth.Server{Db: db})
+	wspdepth.Register(s, &wspdepth.Server{Db: db})
 	if err := s.Serve(lis); err != nil {
 		glog.Fatalf("Failed to serve: %v", err)
 	}

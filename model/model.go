@@ -30,3 +30,5 @@ type DepthResponse struct {
 	Bids         []Bid  `json:"bids" bson:"bids"`
 	Asks         []Ask  `json:"asks" bson:"asks"`
 }
+
+type WsPartialDepthEvent = DepthResponse
