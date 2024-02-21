@@ -40,14 +40,29 @@ pd.WsDepthEvent is the gRPC protocol, should be a 1-1 mapping from binance.WsDep
 - model.WsDepthEvent
 model.WsDepthEvent is the custom type to control the mongoDB's field, the content should be related to mongo/initdb.go
 
-## Production
-Run server
-```
-nohup ./bin/bmgo-server-linux-x86 -log_dir="./logs/" -stderrthreshold=INFO -vmodule=file=2 >/dev/null 2>&1 &
-```
 
-Run client
-```
-nohup ./bin/bmgo-wsdepth-linux-x86 -log_dir="./logs/" -stderrthreshold=INFO -vmodule=file=2 -symbol=BTCUSDT >/dev/null 2>&1 &
-nohup ./bin/bmgo-rstdepth-linux-x86 -log_dir="./logs/" -stderrthreshold=INFO -vmodule=file=2 -symbol=BTCUSDT >/dev/null 2>&1 &
-```
+## Develop Process
+### Add a new channel
+1. Select a channel, it can be websocket event or restful response
+2. Base on the channel, add gRPC proto
+3. Add the proto to genproto and generate protocol by makefile
+4. Create service, implement according to pb in service.go
+5. Register to cmd/server/main.go
+6. Create a new client in cmd/client
+7. Add build command in Makefile
+8. Add new collection in script
+9. Run and test
+10. Add new Dockerfile in Dockerfiles/
+11. Go to ECR to create a new registry
+12. Go to Production
+
+## Production
+The app is running on AWS Fargate
+
+For deployment, the pipeline is
+
+- Push container to ECR
+
+- Create task definition of ECS
+
+- Deploy on ECS Cluster using Fargate

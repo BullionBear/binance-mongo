@@ -77,5 +77,26 @@ func main() {
 		glog.Fatal(err)
 	}
 
+	// Create rstDepthResponses collection if it doesn't exist
+	if !collectionExists(ctx, db, "wsDepthPartialEvents") {
+		collOptions := options.CreateCollection()
+
+		if err := db.CreateCollection(ctx, "wsDepthPartialEvents", collOptions); err != nil {
+			glog.Fatal(err)
+		}
+	}
+
+	// Create additional indexes for rstDepthResponses
+	indexModel = mongo.IndexModel{
+		Keys: bson.D{
+			{Key: "lastUpdateId", Value: 1},
+			{Key: "symbol", Value: 1},
+		},
+		Options: options.Index().SetUnique(true),
+	}
+	if _, err := db.Collection("wsDepthPartialEvents").Indexes().CreateOne(ctx, indexModel); err != nil {
+		glog.Fatal(err)
+	}
+
 	glog.Infoln("MongoDB setup completed successfully.")
 }

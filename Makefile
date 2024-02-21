@@ -14,14 +14,9 @@ initdb:
 genproto:
 	protoc --go_out=. --go-grpc_out=. protocols/wsdepth.proto
 	protoc --go_out=. --go-grpc_out=. protocols/rstdepth.proto
+	protoc --go_out=. --go-grpc_out=. protocols/wspdepth.proto
 
-build:
-	go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-server cmd/server/*.go
-	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-server-linux-x86 cmd/server/*.go
-	go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-rstdepth cmd/client/rstdepth/*.go
-	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-rstdepth-linux-x86 cmd/client/rstdepth/*.go
-	go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-wsdepth cmd/client/wsdepth/*.go
-	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-wsdepth-linux-x86 cmd/client/wsdepth/*.go
+build: server-build rstdepth-build wsdepth-build wspdepth-build
 
 server-build:
 	go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-server cmd/server/*.go
@@ -35,11 +30,18 @@ wsdepth-build:
 	go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-wsdepth cmd/client/wsdepth/*.go
 	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-wsdepth-linux-x86 cmd/client/wsdepth/*.go
 
+wspdepth-build:
+	go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-wspdepth cmd/client/wspdepth/*.go
+	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-wspdepth-linux-x86 cmd/client/wspdepth/*.go
+
 server-run:
 	./bin/$(BINARY)-server -logtostderr=true -v=2
 
 wsdepth-run:
 	./bin/$(BINARY)-wsdepth -logtostderr=true -v=2 -symbol=BTCUSDT
+
+wspdepth-run:
+	./bin/$(BINARY)-wspdepth -logtostderr=true -v=2 -symbol=BTCUSDT
 
 rstdepth-run:
 	./bin/$(BINARY)-rstdepth -logtostderr=true -v=2 -symbol=BTCUSDT
