@@ -23,4 +23,4 @@ ENV SYMBOL BTCUSDT
 ENV GRPC localhost:50051
 
 # Command to run your app
-CMD ./bmgo-wsdepth-linux-x86 -logtostderr=true -v=2 -grpc-server=$GRPC -symbol=$SYMBOL
+CMD ./bmgo-wspdepth-linux-x86 -logtostderr=true -v=2 -grpc-server=$GRPC -symbol=$SYMBOL
