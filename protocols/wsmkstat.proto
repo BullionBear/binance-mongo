@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package mkstatsevent;
+
+// Specify the Go package where the generated files should be placed.
+option go_package = "./generated/proto/wsmkstats";
+
+message WsAllMarketsStatEvent {
+  repeated WsMarketStatEvent events = 1;
+}
+
+// Define the WsMarketStatEvent message
+message WsMarketStatEvent {
+  string event = 1;
+  int64 time = 2;
+  string symbol = 3;
+  string priceChange = 4;
+  string priceChangePercent = 5;
+  string weightedAvgPrice = 6;
+  string prevClosePrice = 7;
+  string lastPrice = 8;
+  string closeQty = 9;
+  string bidPrice = 10;
+  string bidQty = 11;
+  string askPrice = 12;
+  string askQty = 13;
+  string openPrice = 14;
+  string highPrice = 15;
+  string lowPrice = 16;
+  string baseVolume = 17;
+  string quoteVolume = 18;
+  int64 openTime = 19;
+  int64 closeTime = 20;
+  int64 firstID = 21;
+  int64 lastID = 22;
+  int64 count = 23;
+}
+
+// Define the service
+service AllMarketsStatEventService {
+  rpc StreamAllMarketsStatEvent(stream WsAllMarketsStatEvent) returns (StreamAllMarketsStatEventResponse);
+}
+
+// Define the response message
+message StreamAllMarketsStatEventResponse {
+  string message = 1;
+}

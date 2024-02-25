@@ -15,6 +15,7 @@ genproto:
 	protoc --go_out=. --go-grpc_out=. protocols/wsdepth.proto
 	protoc --go_out=. --go-grpc_out=. protocols/rstdepth.proto
 	protoc --go_out=. --go-grpc_out=. protocols/wspdepth.proto
+	protoc --go_out=. --go-grpc_out=. protocols/wsmkstat.proto
 
 build: server-build rstdepth-build wsdepth-build wspdepth-build
 
