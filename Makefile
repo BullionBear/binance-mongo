@@ -15,6 +15,7 @@ genproto:
 	protoc --go_out=. --go-grpc_out=. protocols/wsdepth.proto
 	protoc --go_out=. --go-grpc_out=. protocols/rstdepth.proto
 	protoc --go_out=. --go-grpc_out=. protocols/wspdepth.proto
+	protoc --go_out=. --go-grpc_out=. protocols/wsmkstat.proto
 
 build: server-build rstdepth-build wsdepth-build wspdepth-build
 
@@ -34,6 +35,10 @@ wspdepth-build:
 	go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-wspdepth cmd/client/wspdepth/*.go
 	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-wspdepth-linux-x86 cmd/client/wspdepth/*.go
 
+wsmkstats-build:
+	go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-wsmkstats cmd/client/wsmkstats/*.go
+	env GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o ./bin/$(BINARY)-wsmkstats-linux-x86 cmd/client/wsmkstats/*.go
+
 server-run:
 	./bin/$(BINARY)-server -logtostderr=true -v=2
 
@@ -45,6 +50,9 @@ wspdepth-run:
 
 rstdepth-run:
 	./bin/$(BINARY)-rstdepth -logtostderr=true -v=2 -symbol=BTCUSDT
+
+wsmkstats-run:
+	./bin/$(BINARY)-wsmkstats -logtostderr=true -v=2
 
 clean:
 	rm -rf bin/*

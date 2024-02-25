@@ -5,7 +5,7 @@ import (
 	"flag"
 	"time"
 
-	pb "github.com/BullionBear/binance-mongo/generated/proto/wsdepth"
+	pb "github.com/BullionBear/binance-mongo/generated/proto/wsmkstats"
 	"github.com/BullionBear/binance-mongo/utils"
 	"github.com/adshao/go-binance/v2"
 	"github.com/golang/glog"
@@ -14,12 +14,10 @@ import (
 )
 
 func main() {
-	symbol := flag.String("symbol", "BTCUSDT", "Trading symbol")
 	grpcServerAddr := flag.String("grpc-server", "localhost:50051", "gRPC server address")
 
 	flag.Parse() // Parse flags
-	utils.PrintEnv("Client WS Depth")
-	glog.Infoln("Symbol: ", *symbol)
+	utils.PrintEnv("Client WS Markets Stat")
 	glog.Infoln("Connect to: ", *grpcServerAddr)
 	defer glog.Flush()
 
@@ -29,10 +27,10 @@ func main() {
 		glog.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
-	client := pb.NewDepthEventServiceClient(conn)
+	client := pb.NewAllMarketsStatEventServiceClient(conn)
 
 	// Create a stream to the gRPC server.
-	stream, err := client.StreamDepthEvent(context.Background())
+	stream, err := client.StreamAllMarketsStatEvent(context.Background())
 	if err != nil {
 		glog.Fatalf("could not create stream: %v", err)
 	}
@@ -40,11 +38,11 @@ func main() {
 	utils.EchoClock(30 * time.Second)
 
 	// Connect to Binance WebSocket for depth events.
-	doneC, _, err := binance.WsDepthServe100Ms(*symbol, func(event *binance.WsDepthEvent) {
-		grpcEvent := utils.BinanceWsDepthToGrpcEvent(event)
+	doneC, _, err := binance.WsAllMarketsStatServe(func(event binance.WsAllMarketsStatEvent) {
+		grpcEvent := utils.BinanceWsWsAllMarketsStatToGrpcEvent(&event)
 		utils.IncrementCounter()
 		if err := stream.Send(grpcEvent); err != nil {
-			glog.Errorf("Failed to send depth event to gRPC server: %v", err)
+			glog.Errorf("Failed to send markets stat event to gRPC server: %v", err)
 		}
 	}, func(err error) {
 		glog.Errorf("WebSocket Error: %v", err)

@@ -80,5 +80,24 @@ docker run --name bmgo-wspdepth-btcusdt --rm \
     179335631601.dkr.ecr.ap-northeast-1.amazonaws.com/bmgo:wspdepth-latest
 ```
 
+## Client wsmkstats
+### Build
+```
+docker build -f Dockerfiles/Dockerfile.wsmkstats -t 179335631601.dkr.ecr.ap-northeast-1.amazonaws.com/bmgo:wsmkstats-latest .
+```
+
+### Push
+```
+docker push 179335631601.dkr.ecr.ap-northeast-1.amazonaws.com/bmgo:wsmkstats-latest 
+```
+
+### Run wsmkstats container
+```
+docker run --name bmgo-wsmkstats --rm \
+    -e GRPC=bmgo-grpc:50051 \
+    --network lynkora \
+    179335631601.dkr.ecr.ap-northeast-1.amazonaws.com/bmgo:wsmkstats-latest
+```
+
 
 
