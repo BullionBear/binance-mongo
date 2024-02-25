@@ -40,7 +40,7 @@ func main() {
 		collOptions := options.CreateCollection().SetTimeSeriesOptions(tsOptions)
 
 		if err := db.CreateCollection(ctx, "wsDepthEvents", collOptions); err != nil {
-			glog.Fatal(err)
+			glog.Warning(err)
 		}
 		glog.Infoln("Setup collection wsDepthEvents successfully.")
 	}
@@ -53,7 +53,7 @@ func main() {
 		Options: options.Index().SetUnique(false),
 	}
 	if _, err := db.Collection("wsDepthEvents").Indexes().CreateOne(ctx, indexModel); err != nil {
-		glog.Fatal(err)
+		glog.Warning(err)
 	}
 
 	// Create rstDepthResponses collection if it doesn't exist
@@ -61,7 +61,7 @@ func main() {
 		collOptions := options.CreateCollection()
 
 		if err := db.CreateCollection(ctx, "rstDepthResponses", collOptions); err != nil {
-			glog.Fatal(err)
+			glog.Warning(err)
 		}
 	}
 
@@ -74,7 +74,7 @@ func main() {
 		Options: options.Index().SetUnique(true),
 	}
 	if _, err := db.Collection("rstDepthResponses").Indexes().CreateOne(ctx, indexModel); err != nil {
-		glog.Fatal(err)
+		glog.Warning(err)
 	}
 
 	// Create rstDepthResponses collection if it doesn't exist
@@ -82,7 +82,7 @@ func main() {
 		collOptions := options.CreateCollection()
 
 		if err := db.CreateCollection(ctx, "wsDepthPartialEvents", collOptions); err != nil {
-			glog.Fatal(err)
+			glog.Warning(err)
 		}
 	}
 
@@ -95,7 +95,29 @@ func main() {
 		Options: options.Index().SetUnique(true),
 	}
 	if _, err := db.Collection("wsDepthPartialEvents").Indexes().CreateOne(ctx, indexModel); err != nil {
-		glog.Fatal(err)
+		glog.Warning(err)
+	}
+
+	// Create time series collection if it doesn't exist
+	if !collectionExists(ctx, db, "wsMarketStatEvents") {
+		tsOptions := options.TimeSeries().SetTimeField("E").SetMetaField("s").SetGranularity("seconds")
+		collOptions := options.CreateCollection().SetTimeSeriesOptions(tsOptions)
+
+		if err := db.CreateCollection(ctx, "wsMarketStatEvents", collOptions); err != nil {
+			glog.Warning(err)
+		}
+		glog.Infoln("Setup collection wsDepthEvents successfully.")
+	}
+
+	// Assuming index idempotency; MongoDB handles this
+	indexModel = mongo.IndexModel{
+		Keys: bson.D{
+			{Key: "s", Value: 1},
+		},
+		Options: options.Index().SetUnique(false),
+	}
+	if _, err := db.Collection("wsMarketStatEvents").Indexes().CreateOne(ctx, indexModel); err != nil {
+		glog.Warning(err)
 	}
 
 	glog.Infoln("MongoDB setup completed successfully.")
