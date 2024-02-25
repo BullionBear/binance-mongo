@@ -48,7 +48,7 @@ docker build -f Dockerfiles/Dockerfile.wsdepth -t 179335631601.dkr.ecr.ap-northe
 
 ### Push
 ```
-docker push 179335631601.dkr.ecr.ap-northeast-1.amazonaws.com/bmgo:wsdepth-latest .
+docker push 179335631601.dkr.ecr.ap-northeast-1.amazonaws.com/bmgo:wsdepth-latest 
 ```
 
 ### Run wsdepth container
