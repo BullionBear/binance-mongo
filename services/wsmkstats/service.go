@@ -20,17 +20,11 @@ type Server struct {
 
 func (s *Server) StreamAllMarketsStatEvent(stream pb.AllMarketsStatEventService_StreamAllMarketsStatEventServer) error {
 	collection := s.Db.Collection("wsMarketStatEvents") // Should be the only difference between wsdepth
-	buffer := make([]interface{}, 0, 128)               // Preallocate buffer with estimated capacity
-	ticker := time.NewTicker(10 * time.Second)
-	defer ticker.Stop()
-
+	buffer := make([]interface{}, 0, 4096)              // Preallocate buffer with estimated capacity
 	for {
 		select {
-		case <-ticker.C:
-			s.flushBuffer(&buffer, collection)
 		case <-stream.Context().Done():
 			glog.Info("Stream closed by client")
-			s.flushBuffer(&buffer, collection)
 			return nil
 		default:
 			in, err := stream.Recv()
@@ -40,16 +34,13 @@ func (s *Server) StreamAllMarketsStatEvent(stream pb.AllMarketsStatEventService_
 				return nil
 			}
 			doc := toDoc(in)
-			// glog.Infof("Received event: %v", doc)
 
 			s.mu.Lock()
-			buffer = append(buffer, doc)
-			if len(buffer) >= 64 {
-				s.mu.Unlock() // Unlock before flushing to avoid deadlock
-				s.flushBuffer(&buffer, collection)
-			} else {
-				s.mu.Unlock()
+			for _, v := range *doc {
+				buffer = append(buffer, v)
 			}
+			s.mu.Unlock()
+			s.flushBuffer(&buffer, collection)
 		}
 	}
 }
@@ -66,7 +57,7 @@ func (s *Server) flushBuffer(buffer *[]interface{}, collection *mongo.Collection
 	if n_doc > 0 {
 		_, err := collection.InsertMany(context.Background(), *buffer)
 		if err != nil {
-			glog.Errorf("Failed to insert depth events into MongoDB: %v", err)
+			glog.Errorf("Failed to insert markets stat event into MongoDB: %v", err)
 		}
 		*buffer = (*buffer)[:0] // Efficiently clear the buffer while retaining allocated memory
 	}
@@ -78,7 +69,7 @@ func toDoc(event *pb.WsAllMarketsStatEvent) *model.WsAllMarketsStatEvent {
 	for _, e := range event.Events {
 		modelEvent := &model.WsMarketStatEvent{
 			Event:              e.Event,
-			Time:               e.Time,
+			Time:               time.Unix(0, e.Time*int64(time.Millisecond)),
 			Symbol:             e.Symbol,
 			PriceChange:        e.PriceChange,
 			PriceChangePercent: e.PriceChangePercent,
@@ -95,8 +86,8 @@ func toDoc(event *pb.WsAllMarketsStatEvent) *model.WsAllMarketsStatEvent {
 			LowPrice:           e.LowPrice,
 			BaseVolume:         e.BaseVolume,
 			QuoteVolume:        e.QuoteVolume,
-			OpenTime:           e.OpenTime,
-			CloseTime:          e.CloseTime,
+			OpenTime:           time.Unix(0, e.OpenTime*int64(time.Millisecond)),
+			CloseTime:          time.Unix(0, e.CloseTime*int64(time.Millisecond)),
 			FirstID:            e.FirstID,
 			LastID:             e.LastID,
 			Count:              e.Count,
