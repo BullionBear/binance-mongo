@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"flag"
-	"sync"
 	"time"
 
 	pb "github.com/BullionBear/binance-mongo/generated/proto/wspdepth"
@@ -14,17 +13,12 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-var (
-	counter int
-	mu      sync.Mutex
-)
-
 func main() {
 	symbol := flag.String("symbol", "BTCUSDT", "Trading symbol")
 	grpcServerAddr := flag.String("grpc-server", "localhost:50051", "gRPC server address")
 
 	flag.Parse() // Parse flags
-	utils.PrintEnv("Client WS")
+	utils.PrintEnv("Client WS Partial Depth")
 	glog.Infoln("Symbol: ", *symbol)
 	glog.Infoln("Connect to: ", *grpcServerAddr)
 	defer glog.Flush()

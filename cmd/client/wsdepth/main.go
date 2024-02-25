@@ -18,7 +18,7 @@ func main() {
 	grpcServerAddr := flag.String("grpc-server", "localhost:50051", "gRPC server address")
 
 	flag.Parse() // Parse flags
-	utils.PrintEnv("Client WS")
+	utils.PrintEnv("Client WS Depth")
 	glog.Infoln("Symbol: ", *symbol)
 	glog.Infoln("Connect to: ", *grpcServerAddr)
 	defer glog.Flush()
